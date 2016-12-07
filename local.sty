@@ -1,0 +1,381 @@
+
+%%% 分割禁止
+\hyphenation{Jacobian}
+
+
+%%% ルビ
+\makeatletter
+\newdimen\mytempdima
+\newcommand{\ruby}[2]{%
+  \leavevmode
+  \setbox0=\hbox{#1}%
+  \mytempdima=\f@size\p@
+  \setbox1=\hbox{\fontsize{0.5\mytempdima}{0pt}\selectfont #2}%
+  \ifdim\wd0>\wd1 \dimen0=\wd0 \else \dimen0=\wd1 \fi
+  \hbox{%
+    \kanjiskip=0pt plus 2fil
+    \xkanjiskip=0pt plus 2fil
+    \vbox{%
+      \hbox to \dimen0{%
+        \fontsize{0.5\mytempdima}{0pt}\selectfont \hfil#2\hfil}%
+      \nointerlineskip
+      \hbox to \dimen0{\mathstrut\hfil#1\hfil}}}}
+\makeatother
+
+%% クーリエ
+{\usefont{T1}{pcr}{m}{n}}%
+\DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}
+{\usefont{T1}{pcr}{b}{n}}%
+\DeclareFontShape{T1}{pcr}{bc}{n}{<-> pcrr8tn}{}
+
+% 2倍ダッシュ
+\DeclareRobustCommand*\ddash{\makebox[2zw][s]{---\hss ---\hss ---}}
+
+% 丸囲みの数字
+\newcommand\maru[1]{
+  \textcircled{\raisebox{-.25ex}{#1}}
+}
+
+%%% 本文中の文献番号
+\makeatletter
+\def\@citess#1{\mbox{$\m@th^{\hbox{\OverciteFont{[#1]}}}$}}
+\makeatother
+
+
+%%% 設定
+\def\myemph#1#2#3{\index{#3@#1}{\bf #1}（#2）}
+\def\chapref#1{第\ref{#1}章}
+\def\figref#1{{{\ゴチックMB101-R{}図}\usefont{OT1}{phv}{m}{n} \ref{#1}}}
+\def\secref#1{\ref{#1}節}
+%%%
+
+
+%%% カラー
+%\def\chcol{\color[cmyk]{0,1,1,0.5}}
+%\def\chcolbox#1{{\fboxrule=0.4mm\fcolorbox[cmyk]{0.3,0.6,0,0}{0,0.2,0.2,0}{#1}}}
+%\def\chcolt{\color[cmyk]{0,1,1,0.5}}
+
+%\def\dd{{\rm d}}
+%\def\ee{{\rm e}}
+%\def\bm#1{\mbox{\boldmath $#1$}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% リード文
+\makeatletter
+\newdimen\@itemhh
+\def\@hlleader{\leaders\hrule height .5mm\hfil}
+\def\leadbox{\@leadbox}
+\def\@leadbox{\par\vspace{.3\baselineskip}{%\setbox0=\hbox{#2}%
+\global\@itemhh\ht0\global\advance\@itemhh\dp0}%
+\bgroup\@scw\linewidth
+\advance\@scw -19.5mm%\@iboxpos={#1}\@iboxstr={#2}%
+\setbox\scb@x=\hbox\bgroup\hspace*{9.75mm}\begin{minipage}{\@scw}%
+\fontsize{12.5\JQ}{18H}\bfseries\usefont{OT1}{phv}{m}{n}\selectfont\color[gray]{0}\vspace*{4mm}}%
+\def\endleadbox{\vspace*{5.5mm}\end{minipage}\egroup%
+\setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
+\thicklines\setlength{\unitlength}{1pt}%
+\hbox to\@scw{}%\@hlleader}%\kern1mm
+%\@hobox{tl}{tr}{2.85}
+\noindent\parbox[b][0mm][b]{0pt}{\hspace*{-0.15zw}\raisebox{-0.6mm}{\includegraphics[scale=1.0]{ch-eps/under-ch-t.eps}}}
+\par
+\kern-0mm\box\scb@x
+%\@hobox{bl}{br}{2.85}%
+\par
+\noindent\parbox[b][0mm][b]{0pt}{\hspace*{-0.15zw}\raisebox{0mm}{\includegraphics[scale=1.0]{ch-eps/under-ch-b.eps}}}
+%\kern0mm\hrule height.5mm
+}\hfil}\dimen0=\ht\scscb@x%
+\noindent\hbox to\linewidth{\hbox{\vbox to\dimen0{\color{mycolor}\@vrf@{.5mm}{.5mm}}%
+\hss}\box\scscb@x\hbox{\hss\vbox to\dimen0{\color{mycolor}\@vrf@{.5mm}{.5mm}}\hspace*{-0.4mm}}%
+\hss}\egroup}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% リード文 end
+
+\def\@hobox#1#2#3{\hbox to\linewidth{\@oval(#3,#3)[#1]\hfill\@oval(#3,#3)[#2]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 定義
+\makeatletter
+\newcounter{theobox}[chapter]
+\renewcommand{\thetheobox}{%
+  \ifnum\c@chapter>\z@\thechapter.\fi\@arabic\c@theobox}
+ \setcounter{theobox}{0}%
+\newdimen\@itemh\newtoks\@iboxstr
+\def\@htleader{\leaders\hrule height 0.7mm\hfil}
+\def\theobox{\@ifnextchar[{\@theobox}{\@theobox}}
+\def\@theobox#1{\par\vspace{.3\baselineskip}{\setbox0=\hbox{#1}%
+\global\@itemh\ht0\global\advance\@itemh\dp0}%
+\vspace*{0.5\Cvs}\bgroup\refstepcounter{theobox}%
+\@scw\linewidth
+\advance\@scw -13mm
+\@iboxstr={#1}%
+\setbox\scb@x=\hbox\bgroup\hspace*{6.5mm}\begin{minipage}{\@scw}\color[gray]{0}\vspace*{.5\@itemh}\vspace*{16H}}%
+\def\endtheobox{\vspace*{18H}\end{minipage}\egroup%
+\setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
+\thicklines\setlength{\unitlength}{1pt}%
+\color{mycolor}
+\hbox to\linewidth{\rule{6.5mm}{0.7mm}\hskip1.625mm%
+\vbox to0.7mm{\vss\hbox{\color[gray]{0}\fontsize{14\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+ 定義\thetheobox% 定義：番号
+{\fontsize{12\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+\hmv{（}\the\@iboxstr）}\hskip1.625mm}\vss} % タイトル：iboxstr
+\@htleader}\kern6.24mm
+%\@hobox{tl}{tr}{37}
+\kern-6.5mm\box\scb@x
+%\@hobox{bl}{br}{37}%
+\kern-0.7mm\hrule height0.7mm}\hfil}\dimen0=\ht\scscb@x%
+\noindent\hbox to\linewidth{\hbox to.6pt{\vbox to\dimen0{\color{mycolor}\@vrf@{0mm}{0.7mm}}%
+\hss}\box\scscb@x\hbox to.6pt{\hss\vbox to\dimen0{\color{mycolor}\@vrf@{0mm}{0.7mm}}}%
+\hss}\egroup\vspace*{0.5\Cvs}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 定義 end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 囲み記事
+\makeatletter
+\newdimen\@itemh\newtoks\@iboxstr
+\def\@hkleader{\leaders\hrule height 0.5mm\hfil}
+\def\kakomibox{\@kakomibox}
+\def\@kakomibox#1{\par\vspace{.3\baselineskip}{\setbox0=\hbox{#1}%
+\global\@itemh\ht0\global\advance\@itemh\dp0}%
+\vspace*{0.5\Cvs}\bgroup%
+\@scw\linewidth
+\advance\@scw -14.5mm
+\@iboxstr={#1}%
+\setbox\scb@x=\hbox\bgroup\hspace*{7.25mm}\begin{minipage}{\@scw}%
+\fontsize{12\JQ}{18H}\selectfont\color[gray]{0}\vspace*{.5\@itemh}\vspace*{16H}}%
+\def\endkakomibox{\vspace*{18H}\end{minipage}\egroup%
+\setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
+\thicklines\setlength{\unitlength}{1pt}%
+\color{mycolor}
+\noindent\parbox[t][0mm][t]{0pt}{\hspace*{-0.12zw}\raisebox{-2.25mm}{\includegraphics[scale=1.0]{ch-eps/under-ch-t.eps}}}
+\par
+\hbox to\linewidth{\rule{6.5mm}{0.5mm}\hskip1.625mm%
+\vbox to0.5mm{\vss\hbox{\color[gray]{0}\fontsize{14\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+\the\@iboxstr\hskip1.625mm}\vss} % タイトル：iboxstr
+\@hkleader}\kern6.25mm
+%\@hobox{tl}{tr}{37}
+\kern-6.5mm\box\scb@x
+\noindent\parbox[b][0mm][b]{0pt}{\hspace*{-0.12zw}\raisebox{-0.5mm}{\includegraphics[scale=1.0]{ch-eps/under-ch-b.eps}}}
+\par
+%\@hobox{bl}{br}{37}%
+\kern-0.5mm\hrule height0.5mm}\hfil}\dimen0=\ht\scscb@x%
+\noindent\hbox to\linewidth{\hbox to.6pt{\vbox to\dimen0{\color{mycolor}\@vrf@{0.5mm}{0mm}}%
+\hss}\box\scscb@x\hbox to.6pt{\hss\vbox to\dimen0{\color{mycolor}\@vrf@{0.5mm}{0mm}}}%
+\hss}\egroup\vspace*{0.5\Cvs}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 囲み記事 end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% リスト
+\makeatletter
+\newcounter{listbox}[chapter]
+\renewcommand{\thelistbox}{%
+  \ifnum\c@chapter>\z@\thechapter.\fi\@arabic\c@listbox}
+ \setcounter{listbox}{0}%
+\newdimen\@itemh\newtoks\@iboxstr
+\def\@hlileader{\leaders\hrule height 0.3mm\hfil}
+\def\listbox{\@listbox}
+\def\@listbox#1{\par\vspace{0.3\baselineskip}{\setbox0=\hbox{#1}%
+\global\@itemh\ht0\global\advance\@itemh\dp0}%
+\vspace*{0.5\Cvs}\bgroup\refstepcounter{listbox}%
+\@scw\linewidth
+\advance\@scw -19.5mm
+\@iboxstr={#1}%
+%%%%%%%%%%%%%%%%%%%%%%
+\vbox to20.5H{\vss\hbox{\color[gray]{0}\fontsize{14\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+リスト\thelistbox ：\hskip0.5zw% リスト：番号
+{\fontsize{12\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+\the\@iboxstr}\hskip1.625mm}}\nobreak % タイトル：iboxstr
+%%%%%%%%%%%%%%%%%%%%%%
+\setbox\scb@x=\hbox\bgroup\hspace*{9.75mm}\begin{minipage}{\@scw}%
+\fontsize{12\JQ}{18H}\selectfont\tt\color[gray]{0}\vspace*{9.75mm}}%
+\def\endlistbox{\vspace*{9.25mm}\end{minipage}\egroup%
+\setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
+\thicklines\setlength{\unitlength}{1pt}%
+%
+\vbox to0.3mm{}
+\noindent\parbox[t][0mm][t]{0pt}{\hspace*{-0.119zw}\raisebox{-2.1mm}{\includegraphics[scale=1.0]{ch-eps/list-k-t.eps}}}
+\par
+\hbox to\linewidth{\hskip1mm\@hlileader\hskip1mm}\kern6.25mm
+%\@hobox{tl}{tr}{37}
+\kern-6.5mm\box\scb@x
+\noindent\parbox[b][0mm][b]{0pt}{\hspace*{-0.119zw}\raisebox{-0.6mm}{\includegraphics[scale=1.0]{ch-eps/list-k-b.eps}}}
+\par
+%\@hobox{bl}{br}{37}%
+\kern-0.325mm\hbox to\linewidth{\hskip1mm\@hlileader\hskip1mm}}\hfil}\dimen0=\ht\scscb@x%
+\noindent\hbox to\linewidth{\hbox to.6pt{\hspace*{-0.05zw}\vbox to\dimen0{\@vrf@{2mm}{0.3mm}}%
+\hss}\box\scscb@x\hbox to.6pt{\hss\vbox to\dimen0{\@vrf@{2mm}{0.3mm}}\hspace*{-0.05zw}}%
+\hss}\egroup\vspace*{0.5\Cvs}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% リスト end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% フロートする
+\makeatletter
+\def\fps@flo{htb}
+\def\ftype@flo{4}
+\newenvironment{flo}
+               {\floatenv\@float{flo}\vspace{-\intextsep}}
+               {\vspace{-\intextsep}\end@float}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% フロートend
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% アルゴリズム
+\makeatletter
+\newcounter{algobox}[chapter]
+\renewcommand{\thealgobox}{%
+  \ifnum\c@chapter>\z@\thechapter.\fi\@arabic\c@algobox}
+ \setcounter{algobox}{0}%
+\newdimen\@itemh\newtoks\@iboxstr
+\def\@halleader{\leaders\hrule height 0.3mm\hfil}
+\def\algobox{\@algobox}
+\def\@algobox#1{\par\vspace{0.3\baselineskip}{\setbox0=\hbox{#1}%
+\global\@itemh\ht0\global\advance\@itemh\dp0}%
+\vspace*{0.5\Cvs}\bgroup\refstepcounter{algobox}%
+\@scw\linewidth
+\advance\@scw -19.5mm
+\@iboxstr={#1}%
+%%%%%%%%%%%%%%%%%%%%%%
+\vbox to20.5H{\vss\hbox{\color[gray]{0}\fontsize{14\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+アルゴリズム\thealgobox ：\hskip0.5zw% アルゴリズム：番号
+{\fontsize{12\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+\the\@iboxstr}\hskip1.625mm}}\nobreak % タイトル：iboxstr
+%%%%%%%%%%%%%%%%%%%%%%
+\setbox\scb@x=\hbox\bgroup\hspace*{9.75mm}\begin{minipage}{\@scw}%
+\fontsize{12\JQ}{18H}\selectfont\color[gray]{0}\vspace*{9.75mm}}%
+\def\endalgobox{\vspace*{8.25mm}\end{minipage}\egroup%
+\setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
+\thicklines\setlength{\unitlength}{1pt}%
+%
+\vbox to0.3mm{}
+\noindent\parbox[t][0mm][t]{0pt}{\hspace*{-0.12zw}\raisebox{-2.05mm}{\includegraphics[scale=1.0]{ch-eps/algo-k-t.eps}}}
+\par
+\hbox to\linewidth{%\@halleader
+}\kern6.25mm
+%\@hobox{tl}{tr}{2.5}
+\kern-6.5mm\box\scb@x
+\noindent\parbox[b][0mm][b]{0pt}{\hspace*{-0.12zw}\raisebox{0.5mm}{\includegraphics[scale=1.0]{ch-eps/algo-k-b.eps}}}
+\par
+%\@hobox{bl}{br}{2.5}%
+\kern-0.3mm%\hrule height0.3mm
+}\hfil}\dimen0=\ht\scscb@x%
+\par
+\noindent\hbox to\linewidth{\hbox to.6pt{\hspace*{-0.05zw}\vbox to\dimen0{\color[gray]{0.9}\@vrf@{2mm}{1.005\linewidth}}%
+\hss}\box\scscb@x\hbox to.6pt{\hss\vbox to\dimen0{\color[gray]{0.9}\@vrf@{2mm}{0.3mm}}\hspace*{-0.05zw}}%
+\hss}\egroup\vspace*{0.5\Cvs}}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% アルゴリズム end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% アルゴリズム 改行
+%%%%%%%%
+\newenvironment{colorQuoteii}[1][shadecolor]{%
+\fboxsep=0pt%
+\def\FrameCommand##1{%
+\hskip\rightmargin \hskip\leftmargin%
+%\fboxrule=0.4pt%
+\textcolor[gray]{0.9}{\vrule width 0mm}%
+    \colorbox[gray]{0.9}{##1}%
+\textcolor[gray]{0.9}{\vrule width 0mm}%
+}%
+\MakeFramed{\hrule width0pt\parbox[b][0pt][b]{0mm}{\hspace*{-3.3mm}\vspace*{-0mm}\includegraphics[scale=0.994]{ch-eps/algo-k-t.eps}\hspace*{-3.5mm}}
+\hrule width0pt\advance\hsize-1\width\FrameRestore\advance\hsize-1\width}}%
+{\hrule width0pt\parbox[t][0mm][t]{0mm}{\hspace*{-3.3mm}\vspace*{-0mm}\raisebox{-0.5mm}{\includegraphics[scale=0.994]{ch-eps/algo-k-b.eps}}}\endMakeFramed}%\endquote
+%%%%%%%%
+
+
+%%アルゴリズム
+\newenvironment{algok}[1]{%
+\bgroup
+\refstepcounter{algobox}%
+\hrule width0pt
+%%%%%%%%%%%%%%%%%%%%%%
+\vbox to20.5H{%
+\vss\hbox{\color[gray]{0}\fontsize{14\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M%%%%
+アルゴリズム\thealgobox ：\hskip0.5zw% アルゴリズム：番号
+{\fontsize{12\JQ}{20.5H}\bfseries\usefont{OT1}{phv}{b}{n}\ゴシックMB101-M #1}\hskip1.625mm}}\nobreak % タイトル：iboxstr
+\hrule width0pt \vspace{3pt}
+%%%%%%%%%%%%%%%%%%%%%%
+\begin{colorQuoteii}
+\begin{indentation}{9.75mm}{9.75mm}
+\fontsize{12\JQ}{18H}\selectfont
+%
+\hrule width0pt\vspace*{4pt}\hrule width0pt
+\noindent
+}{
+\vspace*{4pt}
+\end{indentation}
+\end{colorQuoteii}
+\egroup
+\hrule width0pt\vspace*{8.25mm}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 網掛け 上下に罫線が入る
+
+%%%% 3ページ以上になるときBoxの凹みを防ぐ
+\def\algokrule{%
+\begin{indentation}{-9.75mm}{-9.75mm}
+\hspace*{0zw}\vspace*{-0.8zw}
+\end{indentation}
+\hrule width0pt}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% プログラミング
+\makeatletter
+%%%%%%%%
+\newenvironment{colorQuoteiii}[1][shadecolor]{%
+  %\quote
+  \setlength\fboxsep{1zw}
+  %\hsize=\linewidth
+  \def\FrameCommand##1{%
+\hskip\rightmargin \hskip\leftmargin
+\fboxrule=0.4mm%
+\textcolor[cmyk]{0,0,0,0.1}{\vrule width 0.4mm}%
+    \colorbox[cmyk]{0,0,0,0.1}{##1}%
+\textcolor[cmyk]{0,0,0,0.1}{\vrule width 0.4mm}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore\advance\hsize-\width}}%
+{\endMakeFramed\endquote}
+%%%%%%%%
+
+%%leadbox 展開
+\newcommand{\programbox}[1]%
+{\normalfont\parindent=1zw
+\begin{colorQuoteiii}
+
+\vspace{0\Cvs}%
+\begin{flushleft}
+\begin{indentation}{3.25mm}{0mm}
+\textcolor[gray]{0}{
+  {\fontsize{12\JQ}{16H}\selectfont\tt #1}
+}
+\end{indentation}
+\end{flushleft}
+
+\end{colorQuoteiii}
+\par}%\vspace{1\Cvs}%
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% プログラミング
+
+
+

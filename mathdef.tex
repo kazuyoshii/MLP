@@ -1,0 +1,404 @@
+%==============================
+% RL Common Symols
+\def\markov{M}				% Markov chain
+\def\state{\bolds}			% State
+\def\nstate{\bolds'}			% Next state
+\def\action{a}				% Action
+%\def\State{\calS}			% Set of states
+%\def\Action{\calA}			% Set of actions
+\def\reward{r}				% Reward
+\def\discount{\gamma}			% Discount factor
+%\def\return{\xi}			% Return
+\def\return{r}                          % Return
+\def\ereturn{J}				% Expected return
+\def\Qfunc{Q}				% Q function
+\def\Vfunc{V}				% V function
+%\def\areward{\eta}			% Average reward
+\def\areward{R}			% Average reward
+\def\history{h}				% Episode
+\def\Niteration{L}   			% Number of iterations
+\def\Nepisode{N}   			% Number of episodes
+\def\Nstep{T}				% Number of steps
+\def\Nbasis{B}      			% Number of basis functions
+\def\niteration{\ell}		     	% Index for iteration
+\def\nepisode{n}    			% Index for episode
+\def\nstep{t}       			% Index for step
+\def\nbasis{b}      			% Index for basis function
+\def\policy{\pi}			% Policy
+\def\tpro{p}				% Transition probability
+%\def\spro{p^\policy}			% Stationary distribution of state
+\def\density{p}				% Trajectory probability
+%==============================
+
+%==============================
+% Symbols used by Hachiya
+\def\bpolicy{\policy'}		 	% Behavior policy
+\def\Dstate{D}				% Dimension of state space
+\def\dstate{d}				% Index for state dimension
+\def\Dredstate{D'}			% Dimension of state space after reduction
+%\def\ipro{\zeta}			% Initial stateprobability
+\def\ipro{p}    			% Initial stateprobability
+\def\Dsa{\calD_{(\bolds,a)}}
+\def\Nfold{K}      			% Number of folds in cross validation
+\def\nfold{k}       			% Index for fold
+\def\gmn{\widehat{g}_{\nepisode,\nstep}}% Abbreviation of the Bellman residual cost function
+\def\wmNdef{\frac{\prod_{\nstep'=1}^\Nstep\policy(a_{\nepisode, \nstep'}^{\bpolicy}|\bolds_{\nepisode, \nstep'}^{\bpolicy})}{\prod_{{\nstep'}=1}^\Nstep\bpolicy(a_{\nepisode, \nstep'}^{\bpolicy}|\bolds_{\nepisode, \nstep'}^{\bpolicy})}}
+%==============================
+
+%==============================
+% Basic Mathematical Symbols
+\def\transs{\top}			% Transpose
+\def\trans{^\transs}			% Transpose
+\def\d{\mathrm d}
+\newtheorem{defi}{Definition}
+\newtheorem{prop}[defi]{Proposition}
+\newtheorem{lemm}[defi]{Lemma}
+\newtheorem{theo}[defi]{Theorem}
+\newtheorem{coro}[defi]{Corollary}
+\newtheorem{exam}[defi]{Example}
+\newtheorem{fact}[defi]{Fact}
+\newtheorem{algo}[defi]{Algorithm}
+\newtheorem{claim}[defi]{Claim}
+\newcommand{\theoproof}[1]{\noindent{\bf (Proof of Theorem #1) }}
+\newcommand{\propproof}[1]{\noindent{\bf (Proof of Proposition #1) }}
+\newcommand{\lemmproof}[1]{\noindent{\bf (Proof of Lemma #1) }\\}
+\newcommand{\lemmproofn}[1]{\noindent{\bf (Proof of Lemma #1) }}
+\newcommand{\coroproof}[1]{\noindent{\bf (Proof of Corollary #1) }\\}
+\newcommand{\define}{\stackrel{\mathrm{def}}{=}}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\rank}[1]{\mathrm{rank}\left(#1\right)}
+\newcommand{\sign}[1]{\mathrm{sign}\left(#1\right)}
+\newcommand{\prob}{\mathrm{Pr}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\diag}{\mathrm{diag}}
+\newcommand{\sinc}{\mathrm{sinc}\;}
+\newcommand{\unorm}[1]{\|#1\|}
+\newcommand{\unorms}[1]{\unorm{#1}^2}
+\newcommand{\inner}[2]{\langle #1,#2\rangle}
+\newcommand{\mathbbC}{\mathbb{C}}
+\newcommand{\mathbbE}{\mathbb{E}}
+\newcommand{\mathbbN}{\mathbb{N}}
+\newcommand{\mathbbR}{\mathbb{R}}
+\newcommand{\mathbbS}{\mathbb{S}}
+\newcommand{\boldzero}{{\boldsymbol{0}}}
+\newcommand{\boldone}{{\boldsymbol{1}}}
+\newcommand{\boldA}{{\boldsymbol{A}}}
+\newcommand{\boldB}{{\boldsymbol{B}}}
+\newcommand{\boldC}{{\boldsymbol{C}}}
+\newcommand{\boldD}{{\boldsymbol{D}}}
+\newcommand{\boldE}{{\boldsymbol{E}}}
+\newcommand{\boldF}{{\boldsymbol{F}}}
+\newcommand{\boldG}{{\boldsymbol{G}}}
+\newcommand{\boldH}{{\boldsymbol{H}}}
+\newcommand{\boldI}{{\boldsymbol{I}}}
+\newcommand{\boldJ}{{\boldsymbol{J}}}
+\newcommand{\boldK}{{\boldsymbol{K}}}
+\newcommand{\boldL}{{\boldsymbol{L}}}
+\newcommand{\boldM}{{\boldsymbol{M}}}
+\newcommand{\boldN}{{\boldsymbol{N}}}
+\newcommand{\boldO}{{\boldsymbol{O}}}
+\newcommand{\boldP}{{\boldsymbol{P}}}
+\newcommand{\boldQ}{{\boldsymbol{Q}}}
+\newcommand{\boldR}{{\boldsymbol{R}}}
+\newcommand{\boldS}{{\boldsymbol{S}}}
+\newcommand{\boldT}{{\boldsymbol{T}}}
+\newcommand{\boldU}{{\boldsymbol{U}}}
+\newcommand{\boldV}{{\boldsymbol{V}}}
+\newcommand{\boldW}{{\boldsymbol{W}}}
+\newcommand{\boldX}{{\boldsymbol{X}}}
+\newcommand{\boldY}{{\boldsymbol{Y}}}
+\newcommand{\boldZ}{{\boldsymbol{Z}}}
+\newcommand{\bolda}{{\boldsymbol{a}}}
+\newcommand{\boldb}{{\boldsymbol{b}}}
+\newcommand{\boldc}{{\boldsymbol{c}}}
+\newcommand{\boldd}{{\boldsymbol{d}}}
+\newcommand{\bolde}{{\boldsymbol{e}}}
+\newcommand{\boldf}{{\boldsymbol{f}}}
+\newcommand{\boldg}{{\boldsymbol{g}}}
+\newcommand{\boldh}{{\boldsymbol{h}}}
+\newcommand{\boldi}{{\boldsymbol{i}}}
+\newcommand{\boldj}{{\boldsymbol{j}}}
+\newcommand{\boldk}{{\boldsymbol{k}}}
+\newcommand{\boldl}{{\boldsymbol{l}}}
+\newcommand{\boldm}{{\boldsymbol{m}}}
+\newcommand{\boldn}{{\boldsymbol{n}}}
+\newcommand{\boldo}{{\boldsymbol{o}}}
+\newcommand{\boldp}{{\boldsymbol{p}}}
+\newcommand{\boldq}{{\boldsymbol{q}}}
+\newcommand{\boldr}{{\boldsymbol{r}}}
+\newcommand{\bolds}{{\boldsymbol{s}}}
+\newcommand{\boldt}{{\boldsymbol{t}}}
+\newcommand{\boldu}{{\boldsymbol{u}}}
+\newcommand{\boldv}{{\boldsymbol{v}}}
+\newcommand{\boldw}{{\boldsymbol{w}}}
+\newcommand{\boldx}{{\boldsymbol{x}}}
+\newcommand{\boldy}{{\boldsymbol{y}}}
+\newcommand{\boldz}{{\boldsymbol{z}}}
+\newcommand{\alphah}{\widehat{\alpha}}
+\newcommand{\boldalpha}{{\boldsymbol{\alpha}}}
+\newcommand{\boldalphah}{\widehat{\boldalpha}}
+\newcommand{\boldwh}{\widehat{\boldw}}
+\newcommand{\boldbeta}{{\boldsymbol{\beta}}}
+\newcommand{\boldeta}{{\boldsymbol{\eta}}}
+\newcommand{\boldepsilon}{{\boldsymbol{\epsilon}}}
+\newcommand{\boldlambda}{{\boldsymbol{\lambda}}}
+\newcommand{\boldLambda}{{\boldsymbol{\Lambda}}}
+\newcommand{\boldSigma}{{\boldsymbol{\Sigma}}}
+\newcommand{\boldphi}{{\boldsymbol{\phi}}}
+\newcommand{\boldPhi}{{\boldsymbol{\Phi}}}
+\newcommand{\boldvarphi}{{\boldsymbol{\varphi}}}
+\newcommand{\boldpsi}{{\boldsymbol{\psi}}}
+\newcommand{\boldpsih}{\widehat{\boldpsi}}
+\newcommand{\boldPsi}{{\boldsymbol{\Psi}}}
+\newcommand{\boldPsih}{\widehat{\boldPsi}}
+\newcommand{\Psih}{\widehat{\Psi}}
+\newcommand{\psih}{\widehat{\psi}}
+\newcommand{\boldxi}{{\boldsymbol{\xi}}}
+\newcommand{\boldmu}{{\boldsymbol{\mu}}}
+\newcommand{\boldomega}{{\boldsymbol{\omega}}}
+\newcommand{\boldzeta}{{\boldsymbol{\zeta}}}
+\newcommand{\boldpi}{{\boldsymbol{\pi}}}
+\newcommand{\boldtheta}{{\boldsymbol{\theta}}}
+\newcommand{\boldthetah}{{\widehat{\boldtheta}}}
+\newcommand{\boldthetat}{{\widetilde{\boldtheta}}}
+\newcommand{\boldTheta}{{\boldsymbol{\Theta}}}
+\newcommand{\boldThetah}{{\widehat{\boldTheta}}}
+\newcommand{\boldThetat}{{\widetilde{\boldTheta}}}
+\newcommand{\boldWh}{{\widehat{\boldW}}}
+\newcommand{\boldWt}{{\widetilde{\boldW}}}
+\newcommand{\thetah}{{\widehat{\theta}}}
+\newcommand{\thetat}{{\widetilde{\theta}}}
+\newcommand{\rh}{{\widehat{r}}}
+\newcommand{\rt}{{\widetilde{r}}}
+\newcommand{\wh}{{\widehat{w}}}
+\newcommand{\wt}{{\widetilde{w}}}
+\newcommand{\calA}{{\mathcal A}}
+\newcommand{\calB}{{\mathcal B}}
+\newcommand{\calC}{{\mathcal C}}
+\newcommand{\calD}{{\mathcal D}}
+\newcommand{\calE}{{\mathcal E}}
+\newcommand{\calF}{{\mathcal F}}
+\newcommand{\calG}{{\mathcal G}}
+\newcommand{\calH}{{\mathcal H}}
+\newcommand{\calI}{{\mathcal I}}
+\newcommand{\calJ}{{\mathcal J}}
+\newcommand{\calK}{{\mathcal K}}
+\newcommand{\calL}{{\mathcal L}}
+\newcommand{\calM}{{\mathcal M}}
+\newcommand{\calN}{{\mathcal N}}
+\newcommand{\calO}{{\mathcal O}}
+\newcommand{\calP}{{\mathcal P}}
+\newcommand{\calQ}{{\mathcal Q}}
+\newcommand{\calR}{{\mathcal R}}
+\newcommand{\calS}{{\mathcal S}}
+\newcommand{\calT}{{\mathcal T}}
+\newcommand{\calU}{{\mathcal U}}
+\newcommand{\calV}{{\mathcal V}}
+\newcommand{\calW}{{\mathcal W}}
+\newcommand{\calX}{{\mathcal X}}
+\newcommand{\calY}{{\mathcal Y}}
+\newcommand{\calZ}{{\mathcal Z}}
+\newcommand{\Sb}{\boldS^{(b)}}
+\newcommand{\Sw}{\boldS^{(w)}}
+\newcommand{\Sm}{\boldS^{(m)}}
+\newcommand{\Wb}{\boldW^{(b)}}
+\newcommand{\Ww}{\boldW^{(w)}}
+\newcommand{\oSb}{\widetilde{\boldS}^{(b)}}
+\newcommand{\oSw}{\widetilde{\boldS}^{(w)}}
+\newcommand{\oSm}{\widetilde{\boldS}^{(m)}}
+\newcommand{\normalA}{A}
+\newcommand{\normalD}{D}
+\newcommand{\normalK}{K}
+\newcommand{\normalAb}{Q^{(b)}}
+\newcommand{\normalAw}{Q^{(w)}}
+\newcommand{\normalAm}{Q^{(m)}}
+\newcommand{\normaloAb}{\widetilde{Q}^{(b)}}
+\newcommand{\normaloAw}{\widetilde{Q}^{(w)}}
+\newcommand{\normaloAm}{\widetilde{Q}^{(m)}}
+\newcommand{\normaloAmp}{\widetilde{Q}^{(m_1)}}
+\newcommand{\normaloAmpp}{\widetilde{Q}^{(m_2)}}
+\newcommand{\normaloDw}{\widetilde{D}^{(w)}}
+\newcommand{\normaloDm}{\widetilde{D}^{(m)}}
+\newcommand{\Ab}{\boldQ^{(b)}}
+\newcommand{\Aw}{\boldQ^{(w)}}
+\newcommand{\Am}{\boldQ^{(m)}}
+\newcommand{\oAb}{\widetilde{\boldQ}^{(b)}}
+\newcommand{\oAw}{\widetilde{\boldQ}^{(w)}}
+\newcommand{\oAwc}{\underline{\widetilde{\boldQ}}^{(w)}}
+\newcommand{\oAm}{\widetilde{\boldQ}^{(m)}}
+\newcommand{\oAmp}{\widetilde{\boldQ}^{(m_1)}}
+\newcommand{\oAmpp}{\widetilde{\boldQ}^{(m_2)}}
+\newcommand{\oAmpc}{\underline{\widetilde{\boldQ}}^{(m')}}
+\newcommand{\Lb}{\boldL^{(b)}}
+\newcommand{\Lw}{\boldL^{(w)}}
+\newcommand{\oLb}{\widetilde{\boldL}^{(b)}}
+\newcommand{\oLw}{\widetilde{\boldL}^{(w)}}
+\newcommand{\oLm}{\widetilde{\boldL}^{(m)}}
+\newcommand{\oLmp}{\widetilde{\boldL}^{(m')}}
+\newcommand{\Db}{\boldD^{(b)}}
+\newcommand{\Dw}{\boldD^{(w)}}
+\newcommand{\oDb}{\widetilde{\boldD}^{(b)}}
+\newcommand{\oDw}{\widetilde{\boldD}^{(w)}}
+\newcommand{\oDm}{\widetilde{\boldD}^{(m)}}
+\newcommand{\oDwc}{\underline{\widetilde{\boldD}}^{(w)}}
+\newcommand{\oDmc}{\underline{\widetilde{\boldD}}^{(m)}}
+\newcommand{\regparam}{\lambda}
+\newcommand{\regparamSIC}{\gamma}
+\newcommand{\nsamples}{n}
+\newcommand{\nclasses}{c}
+\newcommand{\slength}{m}
+\newcommand{\reducedim}{m}
+\newcommand{\nparams}{b}
+\newcommand{\inputdim}{d}
+\newcommand{\dimension}{d}
+\newcommand{\bandwidth}{h}
+\newcommand{\RKHStarget}{{\calH}}
+\newcommand{\RKHStargetp}{{\RKHStarget^\prime}}
+\newcommand{\RKHSsub}{{\calS}}
+\newcommand{\designmatrix}{{\boldX}}
+\newcommand{\designmatrixtilde}{\widetilde{\designmatrix}}
+\newcommand{\identitymatrix}{{\boldI}}
+\newcommand{\kernelmatrix}{{\boldK}}
+\newcommand{\learningmatrix}{{\boldL}}
+\newcommand{\kernel}[2]{K(#1,#2)}
+\newcommand{\Ezeta}{\mathbb{E}_\zeta}
+\newcommand{\Enoise}{\mathbb{E}_\boldepsilon}
+\newcommand{\Bxnoise}{B_{\boldx,\boldepsilon}}
+\newcommand{\Ex}{\mathbb{E}_{\{\boldx_i\}_{i=1}^\nsamples}}
+\newcommand{\Exj}{\mathbb{E}_{\boldx_j}}
+\newcommand{\Exnj}{\mathbb{E}_{\{\boldx_i\}_{i\neq j}}}
+\newcommand{\Ey}{\mathbb{E}_{\{y_i\}_{i=1}^\nsamples}}
+\newcommand{\Eyj}{\mathbb{E}_{y_j}}
+\newcommand{\Eynj}{\mathbb{E}_{\{y_i\}_{i\neq j}}}
+\newcommand{\Etu}{\mathbb{E}_{(\boldt,u)}}
+\newcommand{\Et}{\mathbb{E}_{\boldt}}
+\newcommand{\Eu}{\mathbb{E}_{u}}
+\newcommand{\param}{\alpha}
+\newcommand{\bparam}{\boldalpha}
+\newcommand{\learningtarget}{f}
+\newcommand{\learningtargetp}{g}
+\newcommand{\learningtargeto}{r}
+\newcommand{\model}{f_\boldtheta}
+\newcommand{\modelt}{f_{\boldtheta_t}}
+\newcommand{\modelti}{f_{\boldtheta_{t_i}}}
+\newcommand{\modell}{f_{\boldw,\gamma}}
+\newcommand{\modelll}{f_{\boldtheta,\gamma}}
+\newcommand{\learningresult}{\widehat{f}}
+\newcommand{\learningresultTj}{\widehat{f}_{\calT_{j}}}
+\newcommand{\learningresultj}{\widehat{f}_j}
+\newcommand{\learningresultu}{\learningresult_u}
+\newcommand{\weightoperator}{W}
+\newcommand{\learningtargetP}{g}
+\newcommand{\learningtargetPb}{\learningtargetP^\bot}
+\newcommand{\learningtargetPh}{\widehat{\learningtargetP}}
+\newcommand{\learningtargetPhu}{\learningtargetPh_u}
+\newcommand{\learningoperator}{L}
+\newcommand{\learningoperatoru}{\learningoperator_u}
+\newcommand{\samplingoperator}{X}
+\newcommand{\samplingoperatortrans}{\samplingoperator_{t}}
+\newcommand{\inputdomain}{\calD}
+\newcommand{\CL}{\mathrm{C}_\mathrm{L}}
+\newcommand{\XXX}{\mathrm{UTE}}
+\newcommand{\YYY}{\mathrm{UWE}}
+\newcommand{\SIC}{\mathrm{SIC}}
+\newcommand{\ESE}[1]{\mathit{ESE}_{#1}}
+\newcommand{\Bias}[1]{\mathit{Bias}_{#1}}
+\newcommand{\Var}[1]{\mathit{Var}_{#1}}
+\newcommand{\ESEhat}[1]{\widehat{\mathit{ESE}}_{#1}}
+\newcommand{\Biashat}[1]{\widehat{\mathit{Bias}}_{#1}}
+\newcommand{\Biasshat}[1]{\widehat{\mathit{Bias}^2}_{#1}}
+\newcommand{\Varhat}[1]{\widehat{\mathit{Var}}_{#1}}
+\newcommand{\Keval}{d}
+\newcommand{\Kevecy}{t}
+\newcommand{\noisecovmatrix}{\boldQ}
+\newcommand{\noisecovmatrixh}{\widehat{\noisecovmatrix}}
+\newcommand{\boldzt}{\boldz_{\learningtarget}}
+\newcommand{\boldzp}{\boldz_{\learningtargetp}}
+\newcommand{\boldzo}{\boldz_{\learningtargeto}}
+\newcommand{\kernelmatrixv}{\kernelmatrix_{v}}
+\newcommand{\boldDh}{\widehat{\boldD}}
+\newcommand{\boldQh}{\widehat{\boldQ}}
+\newcommand{\boldQt}{\widetilde{\boldQ}}
+\newcommand{\boldUh}{\widehat{\boldU}}
+\newcommand{\boldUt}{\widetilde{\boldU}}
+\newcommand{\learningmatrixWLSh}{\widehat{\learningmatrix}_{w}}
+\newcommand{\ph}{\widehat{p}}
+\newcommand{\pt}{p_{t}}
+\newcommand{\pth}{\ph_{t}}
+\newcommand{\px}{p_{x}}
+\newcommand{\pxh}{\ph_{x}}
+\newcommand{\yh}{\widehat{y}}
+\newcommand{\RISKn}{R^{(\nsamples)}}
+\newcommand{\RISKnm}{R^{(\nsamples-1)}}
+\newcommand{\RISKhn}{\widehat{R}^{(\nsamples)}}
+\newcommand{\fold}{k}
+\newcommand{\loss}[3]{\ell\left(#1,#2,#3\right)}
+\newcommand{\innerRKHS}[2]{\inner{#1}{#2}_\RKHStarget}
+\newcommand{\unormRKHS}[1]{\unorm{#1}_\RKHStarget}
+\newcommand{\unormRKHSs}[1]{\unormRKHS{#1}^2}
+\newcommand{\trpRKHS}[1]{\trp{#1}_\RKHStarget}
+\newcommand{\innerW}[2]{\inner{#1}{#2}_{\boldW}}
+\newcommand{\unormW}[1]{\unorm{#1}_{\boldW}}
+\newcommand{\unormWs}[1]{\unormW{#1}^2}
+\newcommand{\samplingoperators}{\samplingoperator^\ast}
+\newcommand{\samplingoperatord}{\samplingoperator^\dagger}
+\newcommand{\nparamstilde}{\widetilde{\nparams}}
+\newcommand{\learningmatrixWLStilde}{\widetilde{\learningmatrix}_{w}}
+\newcommand{\learningmatrixt}{\learningmatrix^\top}
+\newcommand{\learningmatrixs}{\learningmatrix^\ast}
+\newcommand{\learningmatrixu}{\learningmatrix_u}
+\newcommand{\learningmatrixuh}{\widehat{\learningmatrix}_u}
+\newcommand{\learningmatrixut}{\widetilde{\learningmatrix}_u}
+\newcommand{\learningmatrixWLS}{\learningmatrix_{w}}
+\newcommand{\learningmatrixutilde}{\learningmatrix_r}
+\newcommand{\learningmatrixutildet}{\learningmatrixutilde^\top}
+\newcommand{\paramh}{\widehat{\param}}
+\newcommand{\paramt}{\widetilde{\param}}
+\newcommand{\paramast}{\param^\ast}
+\newcommand{\vparam}{{\boldsymbol{\param}}}
+\newcommand{\vparamast}{\vparam^\ast}
+\newcommand{\vparamasttilde}{\widetilde{\vparam}^\ast}
+\newcommand{\vparamh}{\widehat{\vparam}}
+\newcommand{\vparamt}{\widetilde{\vparam}}
+\newcommand{\vparamhu}{\vparamh_u}
+\newcommand{\vparamhr}{\vparamh_r}
+\newcommand{\vparamhal}{\vparamh_{\param}}
+\newcommand{\kernelmatrixi}{\kernelmatrix^{-1}}
+\newcommand{\kernelmatrixd}{\kernelmatrix^{\dagger}}
+\newcommand{\schatten}[2]{#1\otimes\overline{#2}}
+\newcommand{\schattenp}[2]{\left(#1\otimes\overline{#2}\right)}
+\newcommand{\schattennarrow}[2]{#1\!\otimes\!\overline{#2}}
+\newcommand{\train}[1]{\left(x_{#1},y_{#1}\right)}
+\newcommand{\trainh}{\left(\widehat{x}_{m+1},\widehat{y}_{m+1}\right)}
+\newcommand{\trainhx}{ $\left(\widehat{x}_{m+1}\right.$, $\left.\widehat{y}_{m+1}\right)$ }
+\newcommand{\repker}[1]{K\left(x,#1\right)}
+\newcommand{\J}{J}
+\newcommand{\Jh}{\widehat{\J}}
+\newcommand{\preJh}{pre\Jh}
+\newcommand{\Jw}{J_{w}}
+\newcommand{\Jt}{J_{t}}
+\newcommand{\JW}{J_{\boldW}}
+\newcommand{\JH}{J_{\RKHStarget}}
+\newcommand{\JT}{J_{T}}
+\newcommand{\Bnoise}{B_\boldepsilon}
+\newcommand{\Bzeta}{B_\zeta}
+\newcommand{\C}{C}
+\newcommand{\sgmm}{\sigma_{m+1}}
+\newcommand{\sgmmh}{\widehat{\sigma}_{m+1}}
+\newcommand{\sgs}{\sigma^2}
+\newcommand{\sgsu}{\sgs_u}
+\newcommand{\sgsh}{\widehat{\sigma^2}}
+\newcommand{\sgshu}{\widehat{\sigma^2_u}}
+\newcommand{\sgst}{\widetilde{\sigma}^2}
+\newcommand{\sgq}{\sigma^4}
+\newcommand{\Gen}{G}
+\newcommand{\smallninv}{{\textstyle\frac{1}{\nsamples}}}
+\newcommand{\iid}{\stackrel{\mathrm{i.i.d.}}{\sim}}
+%==============================
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

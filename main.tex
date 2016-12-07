@@ -1,0 +1,106 @@
+﻿%-------------------------------------------------------------------------
+\documentclass[tombow,Proof]{kkg-repub} % 
+%-------------------------------------------------------------------------
+\usepackage[mc=リュウミンR-KL,gt=太ゴB101,ゴシックMB101-M,ゴチックMB101-R,見出ミンMA31]{jfonts}
+%エラーの出る場合は↑の行をコメントアウトし↓のコメントアウトをはずしてください
+\def\ゴシックMB101-M{\mc}
+\def\ゴチックMB101-R{\mc}
+\def\見出ミンMA31{\bf}
+\def\hmv#1{#1}
+%\def\hmv#1{\hspace{-0.5zw}#1\hspace{0.5zw}}
+%
+\usepackage{makeidx}  % 索引作成のため
+\usepackage[dvips]{graphicx} % eps 形式の図版取り込みのため
+\usepackage[dvips]{color}
+\usepackage{float}    % フロートのオプションに 'H' を使用するため
+\usepackage{verbatim} % comment 環境
+\usepackage{bm,amsmath,amssymb,ascmac} 
+\usepackage{amsthm}   %定理
+\usepackage{fancybox} %box
+\usepackage{framed}   %box
+\usepackage{eclbkbox}
+\usepackage{pifont}
+\usepackage[nocompress,superscript]{cite}
+\usepackage{indent}
+\usepackage{framed8a}
+\usepackage{cases}
+\usepackage{cancel}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{subfigure}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{arydshln}
+
+\newcommand{\reffig}[1]{図\ref{fig:#1}}
+\newcommand{\reftab}[1]{表\ref{tab:#1}}
+\newcommand{\refeq}[1]{式(\ref{eq:#1})}
+\newcommand{\refeqs}[2]{式(\ref{eq:#1}), (\ref{eq:#2})}
+\newcommand{\refeqss}[2]{式(\ref{eq:#1})～式(\ref{eq:#2})}
+\newcommand{\refsec}[1]{\ref{sec:#1}章}
+\newcommand{\refsubsec}[1]{\ref{subsec:#1}節}
+\newcommand{\refalgo}[1]{\mbox{アルゴリズム\ref{#1}}}
+
+\def\Vec#1{\textit{\boldmath $#1$}}
+\def\Diag{\mathop{\mathrm{diag}}\nolimits}
+\def\Mfcc{\mathop{\mathrm{mfcc}}\nolimits}
+\def\Hline{\noalign{\hrule height 0.4mm}}
+\def\Mat#1{\textit{\boldmath $#1$}}
+
+%-------------------------------------------------------------------------
+\usepackage{local}
+\input{mathdef}
+
+\kanjiskip=0pt plus .4pt minus.1pt
+
+%%% カラー設定
+\definecolor{mycolor}{cmyk}{0,1,1,0}
+
+%索引用
+\newcommand*{\idxleader}{\leaders\hbox{\textperiodcentered}\hfill}
+\newcommand*{\idxsection}[1]{\par\vspace{2mm}
+\vbox to7mm{\vss{\color[cmyk]{0.5,1,0.3,0}
+\fontsize{14\JQ}{19.18H}\selectfont\新ゴB #1}\vss}
+\par\nobreak\hrule width0pt\vspace{2mm}}
+
+%-------------------------------------------------------------------------
+\makeindex
+%=========================================================================
+\begin{document}
+\frontmatter
+%\setcounter{page}{2}
+%\input{text/preface}
+%\input{text/preface2}
+\tableofcontents
+%-------------------------------------------------------------------------
+\mainmatter
+%
+
+\input{sections/introduction}
+\input{sections/optimization}
+\input{sections/factorization}
+\input{sections/speech}
+\input{sections/music}
+\input{sections/audio}
+
+\appendix %%%% 付録
+
+本稿中で使用した確率密度関数を掲載しておく．
+\begin{align}
+&\mbox{Gamma}(x|a,b) = \frac{b^a}{\Gamma(a)} x^{a - 1} \exp(- bx)
+\\
+&\mbox{Exponential}(x|\lambda) = \mbox{Gamma}(x|1,1/\lambda)
+\end{align}
+\begin{align}
+&\mbox{Poisson}(x|\lambda) = \frac{\lambda^x}{x!}\exp(-\lambda)
+\\
+&\mathcal{N}_c(\bm{x}|\bm{0},\bm\Sigma) 
+= \frac{1}{\pi^M |\bm\Sigma|} \exp(- \bm{x}^H \bm\Sigma^{-1} \bm{x})
+\end{align}
+
+%
+%\addcontentsline{toc}{index}{索引}
+%\printindex
+\backmatter
+%
+\end{document}
