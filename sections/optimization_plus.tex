@@ -1,0 +1,164 @@
+\section{混合ガウスモデルの学習}
+
+本節では，代表的な潜在変数モデルである
+混合ガウスモデル (Gaussian mixture model, GMM) を例に，
+EMアルゴリズム，VB，ギブスサンプリング，周辺化ギブスサンプリングを
+適用する方法について解説します．
+GMMはクラスタリングのための確率モデルで，
+音響信号処理分野において，最も基本的かつ重要な確率モデルの一つです．
+比較的単純にもかかわらず，柔軟な表現力を持つことから，
+音響信号から抽出した多次元の特徴量ベクトルの分布を表現するための標準的な確率モデルとなっています．
+
+観測変数ごとに，どのクラスに所属するかを示す潜在変数を考えます．
+
+
+特徴量ベクトルの分類を行う問題
+例えば，
+
+例として，$N$個の特徴量ベクトル$\bm{X}=\{\bm{x}_1,\cdots,\bm{x}_N\}$を
+$K$クラスに分類することを考えます．
+まず，潜在変数として$N$人の性別データ$\bm{Z}=\{\bm{z}_1,\cdots,\bm{z}_N\}$を考えます．
+ここで，$\bm{z}_n \ (1 \le n \le N)$は，2次元ベクトルで，
+$\bm{x}_n$が男性であれば$\bm{z}_n = [1, 0]^T$，女性であれば$\bm{z}_n = [0, 1]^T$です．
+このように，ある要素が1で他の全ての要素が0であるベクトルをone-hotベクトルと呼び，
+数式の簡潔な表現が可能になります．
+
+このような$\bm{X}$や$\bm{Z}$はどのような過程を経て生成されると考えればいいのでしょうか．
+まず，ある一定の確率$\pi$で表が出るコインを考えます．
+確率$p$は男性と女性の比率を表しています．これを$N$回投げることで，
+各$n$回目の試行に対して，表が出れば$\bm{z}_n = [1 \ 0]^T$（男性），
+裏が出れば$\bm{z}_n = [1 \ 0]^T$（女性）と定めることにします．
+すると，$\bm{Z}$が生成される確率は，
+\begin{align}
+p(\bm{Z}|\pi)  
+= \prod_{n=1}^N \mbox{Bernoulli}(\bm{z}_n|\pi)
+= \prod_{n=1}^N \pi^{z_{n1}} (1 - \pi)^{z_{n2}}
+\label{eq:p_z_pi}
+\end{align}
+で計算できます．
+ここで，$z_{n1}$と$z_{n2}$がそれぞれ$\pi$と$1-\pi$の右肩に乗っていることにより，
+$\bm{z}_n$の値によって，$\pi$と$1-\pi$のいずれかが選択されることに注意してください．
+これが，one-hotベクトルの効果です．
+
+次に，$\bm{x}_n$は，男性あるいは女性の身長の分布を表すガウス分布に従って生成されると考えます．
+すなわち，男性の身長は平均$\mu_1$・分散$\lambda_1^{-1}$のガウス分布，
+女性の身長は平均$\mu_2$・分散$\lambda_2^{-1}$のガウス分布に従うとすると（$\lambda_1,\lambda_2$は精度），
+$\bm{Z}$が与えられたうえで，$\bm{X}$が生成される確率は，
+\begin{align} 
+ p(\bm{X}|\bm{Z},\mu_1,\mu_2,\lambda_1,\lambda_2) 
+ = \prod_{n=1}^N 
+ \mathcal{N}(\bm{x}_n | \mu_1, \lambda_1^{-1})^{z_{n1}} 
+ \mathcal{N}(\bm{x}_n | \mu_2, \lambda_2^{-1})^{z_{n2}}
+\end{align}
+で計算できます．
+GMMのパラメータ$\bm\Theta=\{\pi,\mu_1,\mu_2,\lambda_1,\lambda_2\}$を最尤推定する場合，
+\refeq{eq:model_ml}を解析的に解くことはできないので，
+\refsec{sec:em}で説明するEMアルゴリズムが必要になります．
+
+ベイズモデルを定式化するには，$\bm\Theta$に対する事前分布として，
+共役事前分布を導入することが一般的です．
+具体的には，$\pi$に対してはベータ分布を，
+$\mu_1,\lambda_1$および$\mu_2,\lambda_2$に対してはそれぞれガウス・ガンマ分布を仮定します．
+\begin{align}
+&p(\pi) = \mbox{Beta}(\pi|a_0, b_0)
+\\
+&p(\mu_1,\lambda_1) = \mathcal{N}(\mu_1|\mu_0,(\beta_0\lambda_1)^{-1}) \mathcal{G}(\lambda_1|c_0,d_0)
+\\
+&p(\mu_2,\lambda_2) = \mathcal{N}(\mu_2|\mu_0,(\beta_0\lambda_2)^{-1}) \mathcal{G}(\lambda_2|c_0,d_0)
+\end{align}
+ここで，$a_0$と$b_0$はベータ分布のパラメータ，
+$c_0$と$d_0$はガンマ分布の形状・スケールパラメータです．
+$\beta_0$はガウス分布の精度のスケールパラメータです．
+これらは超パラメータと呼ばれ，事前に適切に設定しておく必要があります．
+ベイズ推定においても，
+\refeq{eq:model_bayes}を解析的に計算することはできず，
+\refsec{sec:vb}あるいは\refsec{sec:mcmc}で説明する反復アルゴリズムが必要になります．
+
+\subsection{EMアルゴリズム}
+
+GMMを例に挙げて，EMアルゴリズムを導出してみます．
+まず，Eステップにおいて，最適な$q(\bm{Z})$を計算すると，
+\begin{align}
+q(\bm{Z}) 
+&= 
+p(\bm{Z}|\bm{X},\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)
+\nonumber\\
+&=
+\frac{p(\bm{X},\bm{Z}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)}{p(\bm{X}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)}
+\nonumber\\
+&\propto 
+p(\bm{X},\bm{Z}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)
+\nonumber\\
+&=
+\prod_{n=1}^N
+\left(\pi \mathcal{N}(x_n | \mu_1, \lambda_1^{-1})\right)^{z_{n1}} 
+\left((1 - \pi) \mathcal{N}(x_n | \mu_2, \lambda_2^{-1})\right)^{z_{n2}}
+\label{eq:em_q_z}
+\end{align}
+を得ます．
+完全尤度関数$p(\bm{X},\bm{Z}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)$は正規化されていないので，
+本来は正規化項$p(\bm{X}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)$を計算する必要があります．
+しかし，$\bm{Z}$が関係する項のみを考え，$\bm{Z}$が従う確率分布が同定できれば，
+正規化項は自動的に定まります．
+\refeq{eq:em_q_z}は，\refeq{eq:p_z_pi}と同じ形式をしていることから，
+$q(\bm{Z})$は$n$ごとのベルヌイ分布の積に分解できます．
+\begin{align}
+ q(\bm{Z}) = \prod_{n=1}^N \mbox{Bernoulli}(\bm{z}_n|\gamma_n)
+\end{align}
+ここで，$\gamma_n$は負担率と呼ばれる値で，
+\begin{align}
+\gamma_n = \frac{\pi \mathcal{N}(x_n | \mu_1, \lambda_1^{-1})}
+{\pi \mathcal{N}(x_n | \mu_1, \lambda_1^{-1}) + (1 - \pi) \mathcal{N}(x_n | \mu_2, \lambda_2^{-1})}
+\end{align}
+で与えられます．
+したがって，潜在変数$\bm{Z}$の$q(\bm{Z})$のもとでの期待値が計算できるようになります
+（これがEステップと呼ばれる理由です）．
+\begin{align}
+ \mathbb{E}_{q(\bm{z}_n)}[\bm{z}_n] = [\gamma_n, 1 - \gamma_n]^T
+\end{align}
+
+次に，Mステップにおいて，
+最適なパラメータ$\pi,\mu_1,\mu_2,\lambda_1,\lambda_2$を求めます．
+まず，最大化したい関数は，完全対数尤度関数の期待値で，
+\begin{align}
+&\mathbb{E}_{q(\bm{Z})}[\log p(\bm{X},\bm{Z}|\pi,\mu_1,\mu_2,\lambda_1,\lambda_2)]
+\nonumber\\
+&=
+\sum_{n=1}^N
+\mathbb{E}_{q(\bm{z}_n)}[z_{n1}] (\log \pi + \log \mathcal{N}(x_n | \mu_1, \lambda_1^{-1}))
+\nonumber\\
+&\ \ \ +
+\sum_{n=1}^N
+\mathbb{E}_{q(\bm{z}_n)}[z_{n2}] (\log (1 - \pi) + \log \mathcal{N}(x_n | \mu_2, \lambda_2^{-1}))
+\nonumber\\
+&=
+\sum_{n=1}^N
+\gamma_n (\log \pi + \log \mathcal{N}(x_n | \mu_1, \lambda_1^{-1}))
+\nonumber\\
+&\ \ \ +
+\sum_{n=1}^N
+(1 - \gamma_n) (\log (1 - \pi) + \log \mathcal{N}(x_n | \mu_2, \lambda_2^{-1}))
+\end{align}
+で与えられます．
+これを，$\pi$，$\mu_1$，$\lambda_1$，$\mu_2$，$\lambda_2$それぞれについて
+偏微分してゼロとおくことで，各パラメータの更新式が得られます．
+\begin{align}
+ &\pi = \frac{1}{N} \sum_{n=1}^N \gamma_n
+ \ \ \ \
+ \mu_1 = \frac{\sum_{n=1}^N \gamma_n x_n}{\sum_{n=1}^N \gamma_n}
+ \ \ \ \
+ \mu_2 = \frac{\sum_{n=1}^N (1 - \gamma_n) x_n}{\sum_{n=1}^N (1 - \gamma_n)}
+ \\
+ &\lambda_1^{-1} = \frac{\sum_{n=1}^N \gamma_n (x_n - \mu_1)^2}{\sum_{n=1}^N \gamma_n}
+ \ \ \ \
+ \lambda_2^{-1} = \frac{\sum_{n=1}^N (1 - \gamma_n) (x_n - \mu_2)^2}{\sum_{n=1}^N (1 - \gamma_n)}
+\end{align}
+
+\subsection{変分ベイズ法}
+
+GMMに対するベイズ推定にVBを適用する場合の具体的なアルゴリズムは
+教科書\cite{bishop}などを参照してください．
+
+\subsection{ギブスサンプリング}
+
+\subsection{周辺化ギブスサンプリング}

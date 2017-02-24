@@ -1474,3 +1474,81 @@ Probabilitic Latent Component Analysis
 \subsection{ノンパラメトリックベイズモデル}
 
 \subsection{音源分離への応用}
+
+前節の議論を踏まえて，\refeq{eq:kl_s_p}, (\ref{eq:p_w_km}),
+(\ref{eq:p_h_kn}), (\ref{eq:p_t_k})で定義される
+ノンパラメトリックベイズKL-NMF (GaP-KL-NMF)
+あるいは\refeq{eq:is_s_p}, (\ref{eq:p_w_km}),
+        (\ref{eq:p_h_kn}), (\ref{eq:p_t_k})で定義される
+ノンパラメトリックベイズIS-NMF (GaP-IS-NMF)に対する
+変分ベイズ法 (Variational Bayes: VB) について述べる．
+今，観測データ$\bm{X}$が与えられたときに，
+ベイズの定理を用いて未知パラメータ$\bm\theta,\bm{W},\bm{H}$の事後分布
+\begin{eqnarray}
+ p(\bm\theta,\bm{W},\bm{H} | \bm{X}) 
+ = \frac{p(\bm{X}, \bm\theta,\bm{W},\bm{H})}{p(\bm{X})}
+\end{eqnarray}
+を計算したい．
+しかし，周辺尤度$p(\bm{X})$は解析的に計算できないため，
+対数周辺尤度の変分下限$\mathcal{L}(q)$を構成し，
+逐次最大化を行うことで$p(\bm{X})$を近似することを考える．
+すなわち，変分分布$q(\bm\theta,\bm{W},\bm{H})$に対し，
+凹関数$f(x)=\log(x)$に対してJensenの不等式を用いると以下を得る．
+\begin{align}
+&
+ \log p(\bm{X})
+ \nonumber\\
+&
+ = \log \int q(\bm\theta,\bm{W},\bm{H}) 
+ \frac{p(\bm{X},\bm\theta,\bm{W},\bm{H})}{q(\bm\theta,\bm{W},\bm{H})} d\bm\theta d\bm{W} d\bm{H}
+ \nonumber\\
+&
+ \ge \int q(\bm\theta,\bm{W},\bm{H}) 
+ \log \frac{p(\bm{X},\bm\theta,\bm{W},\bm{H})}{q(\bm\theta,\bm{W},\bm{H})} d\bm\theta d\bm{W} d\bm{H}
+ \nonumber\\
+&
+ = \mathbb{E}_{q(\bm\theta,\bm{W},\bm{H})}[\log p(\bm{X},\bm\theta,\bm{W},\bm{H})]
+ \nonumber\\
+& \ \ \ \
+ - \mathbb{E}_{q(\bm\theta,\bm{W},\bm{H})}[\log q(\bm\theta,\bm{W},\bm{H})]
+ \nonumber\\
+&
+ \overset{\mbox{\scriptsize def}}{=} \mathcal{L}(q)
+\end{align}
+等号成立条件は$q(\bm\theta,\bm{W},\bm{H}) = p(\bm\theta,\bm{W},\bm{H}|\bm{X})$であり，
+このとき$\mathcal{L}(q)$が最大値をとる．
+しかし，真の事後分布$p(\bm\theta,\bm{W},\bm{H} | \bm{X})$は計算困難であるため，
+変分事後分布を因子分解可能な形$q(\bm\theta,\bm{W},\bm{H}) = q(\bm\theta) q(\bm{W}) q(\bm{H})$に限定し，
+その中でも以下で計算できる変分下限
+\begin{align}
+&
+ \mathcal{L}(q) = \mathbb{E}_{q}[\log p(\bm{X}|\bm\theta,\bm{W},\bm{H})]
+ + \mathbb{E}_{q}[\log p(\bm\theta)]
+ \nonumber\\
+& \ \ \ \
+ + \mathbb{E}_{q}[\log p(\bm{W})]
+ + \mathbb{E}_{q}[\log p(\bm{H})]
+ \nonumber\\
+& \ \ \ \
+ + H(q(\bm\theta)) + H(q(\bm{W})) + H(q(\bm{H}))
+ \label{eq:lb}
+\end{align}
+を最大化するものを求めたい．
+ここで，$H(\cdot)$はエントロピーを表す．
+これは，変分事後分布$q(\bm\theta) q(\bm{W}) q(\bm{H})$の
+真の事後分布$p(\bm\theta,\bm{W},\bm{H}|\bm{X})$に対するKLダイバージェンスを最小化することと等価である．
+\refeq{eq:lb}を逐次最大化するには，
+以下の更新式を収束するまで繰り返せば良い．
+\begin{eqnarray}
+ \!\!
+ q(\bm\theta) \propto \exp(\mathbb{E}_{q(\bm{H},\bm{W})}[\log p(\bm{X},\bm\theta,\bm{W},\bm{H})])
+ \label{eq:q_t}
+ \\
+ \!\!
+ q(\bm{H}) \propto \exp(\mathbb{E}_{q(\bm\theta,\bm{W})}[\log p(\bm{X},\bm\theta,\bm{W},\bm{H})])
+ \label{eq:q_w}
+ \\
+ \!\!
+ q(\bm{W}) \propto \exp(\mathbb{E}_{q(\bm\theta,\bm{H})}[\log p(\bm{X},\bm\theta,\bm{W},\bm{H})]) 
+ \label{eq:q_h}
+\end{eqnarray}

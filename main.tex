@@ -32,13 +32,13 @@
 \usepackage{algpseudocode}
 \usepackage{arydshln}
 
-\newcommand{\reffig}[1]{図\ref{fig:#1}}
-\newcommand{\reftab}[1]{表\ref{tab:#1}}
-\newcommand{\refeq}[1]{式(\ref{eq:#1})}
-\newcommand{\refeqs}[2]{式(\ref{eq:#1}), (\ref{eq:#2})}
-\newcommand{\refeqss}[2]{式(\ref{eq:#1})～式(\ref{eq:#2})}
-\newcommand{\refsec}[1]{\ref{sec:#1}章}
-\newcommand{\refsubsec}[1]{\ref{subsec:#1}節}
+\newcommand{\reffig}[1]{図\ref{#1}}
+\newcommand{\reftab}[1]{表\ref{#1}}
+\newcommand{\refeq}[1]{式(\ref{#1})}
+\newcommand{\refeqs}[2]{式(\ref{#1}), (\ref{#2})}
+\newcommand{\refeqss}[2]{式(\ref{#1})～式(\ref{#2})}
+\newcommand{\refsec}[1]{\ref{#1}章}
+\newcommand{\refsubsec}[1]{\ref{#1}節}
 \newcommand{\refalgo}[1]{\mbox{アルゴリズム\ref{#1}}}
 
 \def\Vec#1{\textit{\boldmath $#1$}}
@@ -83,20 +83,20 @@
 \input{sections/music}
 \input{sections/audio}
 
-\appendix %%%% 付録
+%\appendix %%%% 付録
 
-本稿中で使用した確率密度関数を掲載しておく．
-\begin{align}
-&\mbox{Gamma}(x|a,b) = \frac{b^a}{\Gamma(a)} x^{a - 1} \exp(- bx)
-\\
-&\mbox{Exponential}(x|\lambda) = \mbox{Gamma}(x|1,1/\lambda)
-\end{align}
-\begin{align}
-&\mbox{Poisson}(x|\lambda) = \frac{\lambda^x}{x!}\exp(-\lambda)
-\\
-&\mathcal{N}_c(\bm{x}|\bm{0},\bm\Sigma) 
-= \frac{1}{\pi^M |\bm\Sigma|} \exp(- \bm{x}^H \bm\Sigma^{-1} \bm{x})
-\end{align}
+%本稿中で使用した確率密度関数を掲載しておく．
+%\begin{align}
+%&\mbox{Gamma}(x|a,b) = \frac{b^a}{\Gamma(a)} x^{a - 1} \exp(- bx)
+%\\
+%&\mbox{Exponential}(x|\lambda) = \mbox{Gamma}(x|1,1/\lambda)
+%\end{align}
+%\begin{align}
+%&\mbox{Poisson}(x|\lambda) = \frac{\lambda^x}{x!}\exp(-\lambda)
+%\\
+%&\mathcal{N}_c(\bm{x}|\bm{0},\bm\Sigma) 
+%= \frac{1}{\pi^M |\bm\Sigma|} \exp(- \bm{x}^H \bm\Sigma^{-1} \bm{x})
+%\end{align}
 
 %
 %\addcontentsline{toc}{index}{索引}
